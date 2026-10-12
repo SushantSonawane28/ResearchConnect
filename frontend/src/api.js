@@ -1,5 +1,5 @@
 // All calls to the backend live here, so pages stay simple.
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const BASE = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/+$/, "");
 
 export function getToken() { return localStorage.getItem("token"); }
 export function setSession(data) {
@@ -10,11 +10,16 @@ export function setSession(data) {
 export function logout() { localStorage.clear(); }
 
 async function call(path, method = "GET", body) {
-  const res = await fetch(BASE + path, {
-    method,
-    headers: { "Content-Type": "application/json", ...(getToken() ? { Authorization: "Bearer " + getToken() } : {}) },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res;
+  try {
+    res = await fetch(BASE + path, {
+      method,
+      headers: { "Content-Type": "application/json", ...(getToken() ? { Authorization: "Bearer " + getToken() } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (err) {
+    throw new Error(`Cannot connect to backend (${BASE}). Please check CORS and network settings.`);
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Request failed");
   return data;

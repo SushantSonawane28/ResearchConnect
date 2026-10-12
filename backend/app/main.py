@@ -10,8 +10,14 @@ Base.metadata.create_all(bind=engine)   # creates tables on first start
 lock_down_postgres_tables()             # PostgreSQL/Supabase only: blocks the public Data API
 
 app = FastAPI(title="ResearchConnect (PRAYAS) API", version="0.1.0")
-app.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS, allow_credentials=True,
-                   allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"^https://.*\.vercel\.app$|^http://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 for r in (auth, profiles, projects, match, requests, opportunities, admin, alerts):
     app.include_router(r.router)
 
