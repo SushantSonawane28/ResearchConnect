@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ResearchConnect (PRAYAS) - Starter Project
 
 A research collaboration platform that recommends collaborators using four matching methods
@@ -234,3 +235,6 @@ Antigravity / Claude Code are tools to WRITE code faster; the hosting is Render/
   written carefully but not run end-to-end in the environment that built this zip, so expect to fix a
   small bug or two on first run - paste the error to your assistant.
 - Login rate limiting is a simple in-memory version; use a proper tool (e.g. slowapi + Redis) in production.
+=======
+# ResearchConnect
+>>>>>>> 4121d179110344d0754ab9bf24192ea6a4278f71
