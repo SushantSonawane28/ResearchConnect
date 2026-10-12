@@ -1,0 +1,10 @@
+.env
+*.db
+backend/outbox/
+__pycache__/
+.venv/
+node_modules/
+dist/
+backend/data/*.json
+backend/data/*.csv
+*.zip
