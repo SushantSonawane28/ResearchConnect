@@ -1,0 +1,68 @@
+{
+  "systemSetup": [
+    {
+      "name": "Install Python Tooling",
+      "command": "curl -LsSf https://astral.sh/uv/install.sh | sh"
+    }
+  ],
+  "templateName": "custom",
+  "projectDependencies": [
+    {
+      "name": "Create Python Environment",
+      "command": "$HOME/.local/bin/uv venv backend/.venv --python 3.11"
+    },
+    {
+      "name": "Install Backend Dependencies",
+      "command": "$HOME/.local/bin/uv pip install --python backend/.venv/bin/python -r backend/requirements.txt"
+    },
+    {
+      "name": "Install Frontend Dependencies",
+      "command": "npm ci --prefix frontend"
+    }
+  ],
+  "codeChecks": [
+    {
+      "name": "Run Backend Tests",
+      "command": "backend/.venv/bin/python -m pytest backend/tests"
+    }
+  ],
+  "buildSteps": [
+    {
+      "name": "Build Frontend",
+      "command": "npm run build --prefix frontend"
+    }
+  ],
+  "runStep": [
+    {
+      "name": "Run Backend Server",
+      "command": "backend/.venv/bin/uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8000",
+      "port": "8000"
+    },
+    {
+      "name": "Run Frontend Server",
+      "command": "npm run dev --prefix frontend -- --host 0.0.0.0 --port 4000",
+      "port": "4000"
+    }
+  ],
+  "deploySteps": [],
+  "cleanupFiles": [
+    "backend/.venv",
+    "frontend/node_modules",
+    "frontend/dist",
+    "backend/prayas.db",
+    "backend/outbox",
+    "backend/.env",
+    "frontend/.env"
+  ],
+  "packageManager": "npm",
+  "envPaths": [
+    {
+      "name": "backend",
+      "path": "backend/.env"
+    },
+    {
+      "name": "frontend",
+      "path": "frontend/.env"
+    }
+  ]
+}
